@@ -1,0 +1,38 @@
+﻿<Application
+    x:Class="RandomPunisher.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RandomPunisher">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <ResourceDictionary>
+                    <FontFamily x:Key="SymbolThemeFontFamily">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+                    <Style TargetType="FontIcon">
+                        <Setter Property="FontFamily" Value="{StaticResource SymbolThemeFontFamily}"/>
+                    </Style>
+                    <Style TargetType="ScrollViewer">
+                        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                    </Style>
+                    <Thickness x:Key="PivotItemMargin">0</Thickness>
+                </ResourceDictionary>
+                <ResourceDictionary Source="Styles\AccentAppBarButtonStyle.xaml"/>
+                <ResourceDictionary Source="Styles\FlyoutStyle.xaml"/>
+                <ResourceDictionary Source="Styles\MenuFlyoutItemStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <StaticResource x:Key="AccentBackground" ResourceKey="SystemAccentColorDark1"/>
+                    <SolidColorBrush x:Key="AppBgColor" Color="#FFF3F3F3"/>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <StaticResource x:Key="AccentBackground" ResourceKey="SystemAccentColorLight2"/>
+                    <SolidColorBrush x:Key="AppBgColor" Color="#FF202020"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
+</Application>
