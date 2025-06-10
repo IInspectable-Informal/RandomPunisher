@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="mp uap uap3 rescap">
+
+  <Identity
+    Name="RandomPunisherCilent"
+    Publisher="CN=未知"
+    Version="2.1.1.0"/>
+
+  <mp:PhoneIdentity PhoneProductId="609810ff-d28d-4b7f-af3a-1cadf4c480eb" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+
+  <Properties>
+    <DisplayName>随机惩罚器</DisplayName>
+    <PublisherDisplayName>未知</PublisherDisplayName>
+    <Logo>Assets\AppIcons\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0"/>
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate"/>
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="RandomPunisher.App">
+      <uap:VisualElements
+        DisplayName="随机惩罚器"
+        Square150x150Logo="Assets\Tiles\Square150x150Logo.png"
+        Square44x44Logo="Assets\AppIcons\Square44x44Logo.png"
+        Description="你敢趴台睡觉吗？如果你敢，那就试试这个呗！"
+        BackgroundColor="red">
+        <uap:DefaultTile
+          Wide310x150Logo="Assets\Tiles\Wide310x150Logo.png"
+          Square71x71Logo="Assets\Tiles\SmallTile.png"
+          Square310x310Logo="Assets\Tiles\LargeTile.png">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo"/>
+            <uap:ShowOn Tile="wide310x150Logo"/>
+            <uap:ShowOn Tile="square310x310Logo"/>
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile>
+        <uap:SplashScreen Image="Assets\AppIcons\SplashScreen.png" BackgroundColor="red"/>
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="landscape"/>
+          <uap:Rotation Preference="landscapeFlipped"/>
+        </uap:InitialRotationPreference>
+      </uap:VisualElements>
+      <Extensions>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="punisher">
+            <uap:DisplayName>随机惩罚器</uap:DisplayName>
+            <uap:Logo>Assets\AppIcons\Square44x44Logo.png</uap:Logo>
+          </uap:Protocol>
+        </uap:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <rescap:Capability Name="broadFileSystemAccess"/><!--不能删除，否则应用无法访问文件系统!-->
+    <rescap:Capability Name="confirmAppClose"/><!--不能删除，否则应用会被直接关闭!-->
+    <Capability Name="internetClient"/><!--不能删除，否则应用无法访问互联网!-->
+    <uap3:Capability Name="backgroundMediaPlayback"/><!--不能删除，否则应用无法在后台播放媒体!-->
+  </Capabilities>
+</Package>

@@ -1,0 +1,121 @@
+﻿<UserControl
+    x:Class="RandomPunisher.DialogContent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RandomPunisher"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d" Loaded="SetContent"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    Margin="0,0,-24,0">
+
+    <ScrollViewer Padding="0,0,24,0">
+        <StackPanel>
+            <StackPanel x:Name="SelectDrive" Visibility="Collapsed">
+                <ComboBox x:Name="DrivesList" PlaceholderText="没有找到你想要的磁盘？&#10;试试刷新👆" ItemsSource="{x:Bind AllDrivesList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="EnableContinue">
+                    <ComboBox.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="请选择逻辑驱动器：" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                            <Button Click="GetDrives" HorizontalAlignment="Right" Grid.Column="1">
+                                <StackPanel Orientation="Horizontal">
+                                    <FontIcon Glyph="&#xE72C;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="刷新"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </ComboBox.Header>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="local:DriveInfoEx">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{x:Bind Path}" FontSize="24" TextWrapping="WrapWholeWords" Foreground="{ThemeResource AccentBackground}"/>
+                                <TextBlock Text="类型：" Grid.Row="1"/>
+                                <TextBlock Text="{x:Bind FDriveType()}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                <TextBlock Text="存储信息：" Grid.Row="2"/>
+                                <muxc:ProgressRing Value="{x:Bind UsedSpace}" Maximum="{x:Bind TotalSpace}" Width="50" Height="50" IsIndeterminate="False" Grid.Row="3" Grid.RowSpan="3"/>
+                                <TextBlock Text="{x:Bind FUsedSpace}" Grid.Row="3" Grid.Column="1"/>
+                                <TextBlock Text="{x:Bind FFreeSpace}" Grid.Row="4" Grid.Column="1"/>
+                                <TextBlock Text="{x:Bind FTotalSpace}" Grid.Row="5" Grid.Column="1"/>
+                                <TextBlock Text=" 已用" Grid.Row="3" Grid.Column="2"/>
+                                <TextBlock Text=" 可用" Grid.Row="4" Grid.Column="2"/>
+                                <TextBlock Text=" 总大小" Grid.Row="5" Grid.Column="2"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <Grid x:Name="Processing" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="StatusText" x:FieldModifier="public" TextWrapping="Wrap" Grid.ColumnSpan="3"/>
+                <TextBlock Text="已完成：" Grid.Row="1" Visibility="{x:Bind Progress.Visibility, Mode=OneWay}"/>
+                <muxc:ProgressBar x:Name="Status" x:FieldModifier="public" IsIndeterminate="True" Grid.Row="1" Grid.Column="1"/>
+                <TextBlock x:Name="Progress" x:FieldModifier="public" Margin="10,0,0,0" Visibility="Collapsed" Grid.Row="1" Grid.Column="2"/>
+            </Grid>
+            <TextBlock x:Name="LongTextPresenter" TextWrapping="Wrap" Visibility="Collapsed"/>
+            <TextBox x:Name="ErrorInf" Header="程序发生了错误，详细信息如下：" TextWrapping="Wrap" IsReadOnly="True" ScrollViewer.VerticalScrollMode="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Visibility="Collapsed"/>
+            <StackPanel x:Name="GetURL" Spacing="12" Visibility="Collapsed">
+                <muxc:Expander IsExpanded="True" HorizontalAlignment="Stretch">
+                    <muxc:Expander.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <FontIcon Glyph="&#xE774;" FontSize="20"/>
+                            <TextBlock Text="输入流媒体 URL" TextWrapping="WrapWholeWords" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="1"/>
+                        </Grid>
+                    </muxc:Expander.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="请输入流媒体 URL，多个 URL 之间用换行符隔开，每个 URL 均只能以 http/https/ftp 开头并以以下任一支持的格式（不带 * 号）结尾！&#10;例如：https://www.test.com/media/testmedia.mp4&#10;重复的 URL 将不会被添加。" TextWrapping="WrapWholeWords" Grid.ColumnSpan="2"/>
+                        <TextBlock Text="支持的视频格式：" VerticalAlignment="Center" Grid.Row="1"/>
+                        <Button x:Name="GetVidTypes" Content="&#xE712;" FontFamily="{StaticResource SymbolThemeFontFamily}" CornerRadius="4,4,0,0" Tag="{x:Bind VidTypesShow}" Click="SetTipContent" Tapped="ShowTip" Grid.Row="1" Grid.Column="1"/>
+                        <muxc:TeachingTip x:Name="VidTypesShow" Title="支持的视频格式：" Target="{x:Bind GetVidTypes}" Grid.Row="1"/>
+                        <TextBlock Text="支持的图片格式：" VerticalAlignment="Center" Grid.Row="2"/>
+                        <Button x:Name="GetPicTypes" Content="&#xE712;" FontFamily="{StaticResource SymbolThemeFontFamily}" CornerRadius="0,0,4,4" Tag="{x:Bind PicTypesShow}" Click="SetTipContent" Tapped="ShowTip" Grid.Row="2" Grid.Column="1"/>
+                        <muxc:TeachingTip x:Name="PicTypesShow" Title="支持的图片格式：" Target="{x:Bind GetPicTypes}" Grid.Row="2"/>
+                    </Grid>
+                </muxc:Expander>
+                <TextBox x:Name="URLs" x:FieldModifier="public" AcceptsReturn="True" Padding="5,5,19,19"
+                    ScrollViewer.HorizontalScrollMode="Auto"
+                    ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+            </StackPanel>
+            <TextBlock x:Name="ErrorReport" x:FieldModifier="public" Foreground="Red" TextWrapping="Wrap" Visibility="Collapsed" Grid.Row="1"/>
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>
