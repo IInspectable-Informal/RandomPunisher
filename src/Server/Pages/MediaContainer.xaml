@@ -1,0 +1,107 @@
+﻿<UserControl
+    x:Class="RandomPunisher.Pages.MediaContainer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RandomPunisher.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <AcrylicBrush x:Key="AcrylicTCBackground" BackgroundSource="Backdrop" TintOpacity="0.75" TintColor="#BFF3F3F3" FallbackColor="#BFF3F3F3"/>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <AcrylicBrush x:Key="AcrylicTCBackground" BackgroundSource="Backdrop" TintOpacity="0.75" TintColor="#BF202020" FallbackColor="#BF202020"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+            <local:Converter1 x:Key="Converter01"/>
+            <local:Converter2 x:Key="Converter02"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <muxc:NavigationView x:Name="ItemsNavView" OpenPaneLength="{x:Bind PaneWidth, Mode=OneWay}"
+                         SelectionChanged="SelectMedia" MenuItemsSource="{x:Bind MediaList, Mode=OneWay}"
+                         PaneTitle="媒体资源" PaneDisplayMode="LeftMinimal" IsBackButtonVisible="Collapsed" IsSettingsVisible="False">
+        <muxc:NavigationView.MenuItemTemplate>
+            <DataTemplate x:DataType="root:MediaInfo" xmlns:root="using:RandomPunisher">
+                <muxc:NavigationViewItem Content="{x:Bind MediaPath}" ToolTipService.ToolTip="{x:Bind MediaPath}">
+                    <muxc:NavigationViewItem.Icon>
+                        <FontIcon Glyph="{x:Bind MediaType}"/>
+                    </muxc:NavigationViewItem.Icon>
+                </muxc:NavigationViewItem>
+            </DataTemplate>
+        </muxc:NavigationView.MenuItemTemplate>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Tapped="SetTCVis" Grid.RowSpan="2">
+                <muxc:ScrollView x:Name="ImgMonitor" ZoomMode="Enabled" SizeChanged="SetSize" CornerRadius="0">
+                    <Image Stretch="Uniform">
+                        <Image.Source>
+                            <BitmapImage x:Name="ImgSource" CreateOptions="IgnoreImageCache" AutoPlay="True" ImageOpened="Opened"/>
+                        </Image.Source>
+                    </Image>
+                </muxc:ScrollView>
+                <Frame x:Name="VidMonitor" RequestedTheme="Dark" Visibility="Collapsed" SizeChanged="SetSize"
+                       muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"/>
+            </Grid>
+            <Grid x:Name="TransportControl" Background="{ThemeResource AcrylicTCBackground}" CornerRadius="6,6,0,0" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <muxc:ProgressBar x:Name="Waiting" Visibility="Collapsed" Margin="5" Grid.ColumnSpan="2"/>
+                <Slider x:Name="Pos" ValueChanged="SetPos" ThumbToolTipValueConverter="{StaticResource Converter01}" IsEnabled="False" Margin="5,0,5,0" Grid.ColumnSpan="2"/>
+                <AppBarButton x:Name="PlayButton" LabelPosition="Collapsed" Width="40" Click="PlayerControl" IsEnabled="False" Grid.Row="1">
+                    <AppBarButton.Icon>
+                        <FontIcon x:Name="PlayIcon" Glyph="&#xE768;"/><!--E769-->
+                    </AppBarButton.Icon>
+                    <ToolTipService.ToolTip>
+                        <ToolTip x:Name="PlayTip" Content="播放"/>
+                    </ToolTipService.ToolTip>
+                </AppBarButton>
+                <CommandBar DefaultLabelPosition="Collapsed" Background="Transparent" Grid.Row="1" Grid.Column="1">
+                    <AppBarButton x:Name="VolControl" ToolTipService.ToolTip="音量" IsEnabled="False" Width="40">
+                        <AppBarButton.Flyout>
+                            <Flyout Placement="Top">
+                                <Slider Value="{x:Bind Player.Volume, Mode=TwoWay, Converter={StaticResource Converter02}}" Width="200"/>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE767;"/>
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Click="{x:Bind CurPage.SetFillAppView}" Width="40">
+                        <AppBarButton.Icon>
+                            <FontIcon x:Name="FillAppViewIcon" x:FieldModifier="public" Glyph="&#xE8A7;"/><!--E944-->
+                        </AppBarButton.Icon>
+                        <ToolTipService.ToolTip>
+                            <ToolTip x:Name="FillAppViewTip" x:FieldModifier="public" Content="填满应用视图"/>
+                        </ToolTipService.ToolTip>
+                    </AppBarButton>
+                    <AppBarButton Click="{x:Bind CurPage.Fullscreen}" Width="40">
+                        <AppBarButton.Icon>
+                            <FontIcon x:Name="FullscreenIcon" x:FieldModifier="public" Glyph="&#xE740;"/><!--E73F-->
+                        </AppBarButton.Icon>
+                        <ToolTipService.ToolTip>
+                            <ToolTip x:Name="FullscreenTip" x:FieldModifier="public" Content="全屏"/>
+                        </ToolTipService.ToolTip>
+                    </AppBarButton>
+                </CommandBar>
+            </Grid>
+        </Grid>
+    </muxc:NavigationView>
+
+</UserControl>
